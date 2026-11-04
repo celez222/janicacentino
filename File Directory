@@ -1,0 +1,49 @@
+CreativePortfolio/
+├── public/
+├── src/
+│   ├── assets/
+│   │   ├── fonts/                        # Custom .woff2 typography files
+│   │   ├── images/
+│   │   │   ├── hero/
+│   │   │   │   └── halftone-me.webp      # Top-right hover portrait
+│   │   │   ├── ui-ux/                    # Sliced vertical strips & hover previews (Cosmic Chronicles, etc.)
+│   │   │   ├── graphics/                 # Fanned card thumbnails & full modal images
+│   │   │   └── case-studies/             # High-res WebP mockups organized by project subfolder
+│   │   └── icons/                        # Instagram, Mail, and Phone wireframe SVGs
+│   │
+│   ├── data/
+│   │   ├── uiuxProjects.js               # Metadata, hover states, and slugs for UI/UX strips
+│   │   ├── graphicProjects.js            # Data for fanned graphic cards & pop-up modal gallery
+│   │   ├── aboutTabs.js                  # Content for each interactive folder tab in "ABOUT ME"
+│   │   └── caseStudiesData.js            # Full case study content (problem, research, wireframes, UI)
+│   │
+│   ├── components/
+│   │   ├── layout/
+│   │   │   ├── Preloader.jsx             # Initial loading screen so heavy WebP assets pre-cache smoothly
+│   │   │   ├── BottomDock.jsx            # Floating bottom pill nav (Work, About, Contact)
+│   │   │   └── CornerPortrait.jsx        # Top-right "hover me" expandable pink circle
+│   │   │
+│   │   ├── sections/
+│   │   │   ├── HeroSection.jsx           # "DISMANTLED GRID. PROGRAMMED VISCERAL." landing view
+│   │   │   ├── UiUxSection.jsx           # Multi-panel UI/UX showcase with individual hover colorization
+│   │   │   ├── GraphicSection.jsx        # "GRAPHIC DESIGN" fanned cards + click-to-open modal
+│   │   │   ├── AboutSection.jsx          # "ABOUT ME" interactive wireframe file folder & tab viewer
+│   │   │   └── ContactSection.jsx        # "CONNECT WITH ME" icon switcher (IG, Mail, Phone)
+│   │   │
+│   │   └── ui/
+│   │       ├── GraphicModal.jsx          # Overlay card viewer for Graphic Design works
+│   │       └── FolderDrawer.jsx          # 3D/CSS perspective folder container for About Me
+│   │
+│   ├── pages/
+│   │   ├── Home.jsx                      # Assembles all 5 main sections + BottomDock
+│   │   ├── CaseStudyTemplate.jsx         # Dynamic layout for "/work/:slug" (shared case study structure)
+│   │   └── case-studies/                 # Dedicated custom case study views
+│   │       ├── CosmicChronicles.jsx
+│   │       └── EcoQuest.jsx
+│   │
+│   ├── App.jsx                           # React Router setup + Suspense loading boundary
+│   ├── index.css                         # Tailwind v4 import + global wireframe grid utilities
+│   └── main.jsx
+├── index.html
+├── vite.config.js
+└── README.md
