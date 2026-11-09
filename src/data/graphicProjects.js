@@ -55,16 +55,16 @@ const projects = [
     accent: '#7b6cff',
   },
   {
-    id: 'audition-dark',
-    title: 'Audition (Dark)',
+    id: 'audition-light',
+    title: 'Audition (Light)',
     category: 'Event poster',
     year: '2025',
     description:
-      'Dark-theme audition poster built around oversized outlined lettering.',
+      'Light-theme audition poster with a halftone photo of two guitarists and colorful outlined lettering.',
     tools: ['figma'],
-    file: 'audition-dark.webp',
-    fullFile: 'audition-dark-full.webp',
-    accent: '#1c1c1f',
+    file: 'audition-light.webp',
+    fullFile: 'audition-light-full.webp',
+    accent: '#d8d8d8',
   },
   {
     id: 'back-in-stock',
