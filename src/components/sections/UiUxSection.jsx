@@ -29,6 +29,11 @@ import { uiuxProjects, STAGE, HEADING } from '../../data/uiuxProjects';
  * Clicking a picture, or its "View Project" button, opens /work/<slug> (the case
  * study page). Pass `onOpen` to override.
  *
+ * VIEW PROJECT BUTTON: pointer cursor, and a hover / keyboard-focus state
+ * (brighter pink fill, solid border, soft glow). The fill is a separate layer
+ * inside the button because the button's own background is an inline gradient,
+ * which would otherwise win over any hover class.
+ *
  * Fonts (loaded in src/index.css):
  *   Syne ExtraBold  -> UI/UX DESIGN title
  *   Perpetua Titling -> project titles (font-serif-thin)
@@ -102,19 +107,23 @@ function ViewButton({ onClick, className = '' }) {
       type="button"
       onClick={onClick}
       // below md: fixed 144 x 40 px, 13px text. md and up: scales with the stage (cqw).
-      className={`flex h-10 w-36 items-center justify-center rounded-full font-syne text-[13px] font-medium transition-colors md:h-[var(--bh)] md:w-[var(--bw)] md:text-[length:var(--bf)] hover:border-[#C84B82] hover:bg-[#C84B82]/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C84B82] ${className}`}
+      // cursor-pointer: Tailwind v4 resets buttons to the default arrow, so it is set here.
+      className={`group relative flex h-10 w-36 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-[#C84B82]/50 font-syne text-[13px] font-medium shadow-[inset_8px_0_14px_-10px_rgba(200,75,130,0.6)] transition duration-300 hover:border-[#C84B82] hover:shadow-[inset_8px_0_14px_-10px_rgba(200,75,130,0.9),0_0_18px_rgba(200,75,130,0.45)] focus-visible:border-[#C84B82] active:scale-[0.97] md:h-[var(--bh)] md:w-[var(--bw)] md:text-[length:var(--bf)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C84B82] ${className}`}
       style={{
         '--bw': 'max(120px, 9.84cqw)',
         '--bh': 'max(30px, 2.49cqw)',
         '--bf': 'max(11px, 0.8cqw)',
         color: TEXT,
-        border: '1px solid rgba(200, 75, 130, 0.5)',
         background:
           'linear-gradient(90deg, rgba(200,75,130,0.30) 0%, rgba(200,75,130,0.05) 45%, rgba(0,0,0,0) 100%)',
-        boxShadow: 'inset 8px 0 14px -10px rgba(200, 75, 130, 0.6)',
       }}
     >
-      View Project
+      {/* hover / focus fill */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[#C84B82] opacity-0 transition-opacity duration-300 group-hover:opacity-40 group-focus-visible:opacity-40"
+      />
+      <span className="relative">View Project</span>
     </button>
   );
 }
@@ -220,14 +229,6 @@ export default function UiUxSection({ onOpen }) {
           const panelW =
             bleedL || bleedR ? `calc(${p.panel.w}% + ${BLEED_EXTRA})` : `${p.panel.w}%`;
 
-          // optional small lift on hover (Tives Toolkit)
-          const lift = p.hoverShift
-            ? `${-((p.hoverShift / STAGE.w) * 100).toFixed(3)}cqw`
-            : '0cqw';
-          const liftClass = p.hoverShift
-            ? `md:transition-transform md:duration-300 ${isActive ? 'md:translate-y-[var(--sy)]' : ''}`
-            : '';
-
           return (
             // On md+ this is a stage-sized, click-through layer that carries the
             // entrance slide. The label / panel / info inside opt back in to clicks.
@@ -243,11 +244,10 @@ export default function UiUxSection({ onOpen }) {
             >
               {/* Title label (+ the View Project button for projects that put it beside the title) */}
               <div
-                className={`flex flex-wrap items-center gap-3 md:flex-nowrap md:gap-[0.8cqw] md:pointer-events-auto md:absolute md:left-[var(--ll)] md:top-[var(--lt)] ${liftClass}`}
+                className="flex flex-wrap items-center gap-3 md:flex-nowrap md:gap-[0.8cqw] md:pointer-events-auto md:absolute md:left-[var(--ll)] md:top-[var(--lt)]"
                 style={{
                   '--ll': `${p.label.l}%`,
                   '--lt': `${p.label.t}%`,
-                  '--sy': lift,
                 }}
                 {...hoverProps(p.id)}
               >
@@ -263,11 +263,11 @@ export default function UiUxSection({ onOpen }) {
                 {p.buttonBeside && (
                   <ViewButton
                     onClick={() => open(p)}
-                    className={`transition-opacity duration-300 ${
+                    className={
                       isActive
                         ? 'md:pointer-events-auto md:opacity-100'
                         : 'md:pointer-events-none md:opacity-0'
-                    }`}
+                    }
                   />
                 )}
               </div>
@@ -285,14 +285,13 @@ export default function UiUxSection({ onOpen }) {
                     open(p);
                   }
                 }}
-                className={`relative aspect-[var(--ar)] w-full cursor-pointer overflow-hidden border border-white/30 outline-none focus-visible:border-[#C84B82] md:pointer-events-auto md:absolute md:left-[var(--l)] md:top-[var(--t)] md:aspect-auto md:h-[var(--h)] md:w-[var(--w)] ${liftClass}`}
+                className="relative aspect-[var(--ar)] w-full cursor-pointer overflow-hidden border border-white/30 outline-none focus-visible:border-[#C84B82] md:pointer-events-auto md:absolute md:left-[var(--l)] md:top-[var(--t)] md:aspect-auto md:h-[var(--h)] md:w-[var(--w)]"
                 style={{
                   '--ar': ratio,
                   '--l': panelL,
                   '--t': `${p.panel.t}%`,
                   '--w': panelW,
                   '--h': `${p.panel.h}%`,
-                  '--sy': lift,
                 }}
                 {...hoverProps(p.id)}
               >

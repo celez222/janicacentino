@@ -498,18 +498,28 @@ export default function CaseStudyTemplate() {
   const go = (s) => navigate(`/work/${s}`);
 
   const BackButton = (
-    <button
+    <motion.button
       type="button"
       onClick={back}
-      className="inline-flex cursor-pointer items-center gap-2.5 rounded-full px-5 py-2 font-syne text-[13px] font-medium text-[#F1EFEA] transition-colors hover:border-[#C84B82] hover:bg-[#C84B82]/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C84B82]"
+      className="inline-flex cursor-pointer items-center gap-2.5 rounded-full px-5 py-2 font-syne text-[13px] font-medium text-[#F1EFEA] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C84B82]"
       style={pillStyle}
+      whileHover={{
+        y: -2,
+        scale: 1.03,
+        background:
+          'linear-gradient(90deg, rgba(200,75,130,0.5) 0%, rgba(200,75,130,0.18) 60%, rgba(200,75,130,0.08) 100%)',
+        borderColor: PINK,
+        boxShadow: 'inset 8px 0 18px -8px rgba(200,75,130,0.9), 0 6px 20px rgba(200,75,130,0.2)',
+      }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ duration: 0.2, ease: EASE }}
     >
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <line x1="19" y1="12" x2="5" y2="12" />
         <polyline points="12 19 5 12 12 5" />
       </svg>
       Back to Portfolio
-    </button>
+    </motion.button>
   );
 
   if (!cs) {

@@ -126,7 +126,6 @@ const projects = [
     bleed: 'right', // keeps going to the right edge of the screen
     label: { ...pos(757, 660), vertical: false },
     buttonBeside: true, // "View Project" sits next to the title instead of under the text
-    hoverShift: 7,      // panel + title lift this many stage px on hover (as in your mockup)
     // The start of this sentence is hidden behind the dock in your mockup - edit if needed
     text:
       'A full-stack web application that leverages Artificial Intelligence to generate highly customized font and color palette recommendations for digital creators and web designers.',

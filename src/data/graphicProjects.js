@@ -8,6 +8,15 @@
  *   file     -> thumbnail shown on the fanned card
  *   fullFile -> (optional) bigger image shown in the pop-up.
  *               If you leave it out, the thumbnail is used for both.
+ *   gallery  -> (optional) a list of { label, file } for a STACKED project.
+ *               Clicking the card opens the pop-up on the FIRST image with a
+ *               "click the design to see N more" notification. Clicking the
+ *               design (or the notification) makes the other designs appear
+ *               so the visitor can switch between them. When a gallery is set,
+ *               fullFile is not needed.
+ *   transparent -> (optional) true when the thumbnail has a transparent
+ *               background (glow in the project's colors). The card then has
+ *               no box shadow, so no dark rectangle shows behind it.
  *
  * Details shown around the pop-up:
  *   title, category, description -> frosted panel on the left
@@ -79,6 +88,37 @@ const projects = [
     accent: '#3a2c24',
   },
   {
+    // STACKED project: 3 designs for the same cafe behind one card.
+    id: 'dragon-brew',
+    title: 'Dragon Brew Café Bistro',
+    category: 'Proposed brand identity & menus',
+    year: '2026',
+    description:
+      'Proposed designs for Dragon Brew Café Bistro: a brand identity board with logo lockups, color palette and type pairing, plus a drinks menu and a food menu. These are concept designs, not an official client project.',
+    tools: ['figma'],
+    transparent: true,
+    file: 'dragon-brew.webp',
+    gallery: [
+      { label: 'Branding', file: 'dragon-brew-branding-full.webp' },
+      { label: 'Drinks menu', file: 'dragon-brew-drinks-full.webp' },
+      { label: 'Food menu', file: 'dragon-brew-food-full.webp' },
+    ],
+    accent: '#213b33',
+  },
+  {
+    id: 'cafe-xandra',
+    title: 'Café Xandra × Takoyakipeds',
+    category: 'Proposed promo poster',
+    year: '2026',
+    description:
+      'Proposed "We are open everyday" poster for the Café Xandra x Takoyakipeds food truck, with a hand-drawn octopus mascot and a warm red, blue and yellow palette. This is a concept design, not an official client project.',
+    tools: ['figma'],
+    transparent: true,
+    file: 'cafe-xandra.webp',
+    fullFile: 'cafe-xandra-full.webp',
+    accent: '#8f0008',
+  },
+  {
     id: 'audition',
     title: 'NUD Symphony Audition',
     category: 'Event poster',
@@ -118,5 +158,12 @@ const projects = [
 
 export const graphicProjects = projects.map((p) => {
   const src = resolve(p.file);
-  return { ...p, src, full: resolve(p.fullFile) ?? src };
+
+  // stacked project: resolve every image in the gallery, the pop-up opens on the first one
+  const gallery = p.gallery
+    ? p.gallery.map((g) => ({ ...g, src: resolve(g.file) }))
+    : undefined;
+
+  const full = gallery?.[0]?.src ?? resolve(p.fullFile) ?? src;
+  return { ...p, src, full, gallery };
 });

@@ -85,6 +85,28 @@ export default function GraphicSection() {
   const activeSlot = (((Math.round(-rot / step)) % M) + M) % M;
   const activeProject = projects[activeSlot % N];
 
+  /*
+   * Stacked projects (a project with a `gallery`): clicking the card opens the
+   * pop-up on the FIRST design with a tooltip hint on it. Clicking the design
+   * reveals the others (GraphicModal draws the hint and the thumbnails).
+   * The state is kept together with the project id, so moving to another
+   * project, or closing the pop-up, always starts again at design 1 with the
+   * others hidden.
+   */
+  const [galleryState, setGalleryState] = useState({ id: null, i: 0, revealed: false });
+  const gallery = activeProject.gallery && activeProject.gallery.length > 1 ? activeProject.gallery : null;
+  const sameProject = !!gallery && galleryState.id === activeProject.id;
+  const galleryIndex = sameProject ? Math.min(galleryState.i, gallery.length - 1) : 0;
+  const revealed = sameProject && galleryState.revealed;
+
+  const revealGallery = () => setGalleryState({ id: activeProject.id, i: galleryIndex, revealed: true });
+  const selectDesign = (i) => setGalleryState({ id: activeProject.id, i, revealed: true });
+
+  const closeModal = () => {
+    setOpen(false);
+    setGalleryState({ id: null, i: 0, revealed: false });
+  };
+
   const handleSelect = (slot) => {
     clearTimeout(timer.current);
     const a = norm(slot * step + rot); // how far this card is from center
@@ -236,8 +258,8 @@ export default function GraphicSection() {
                   onClick={() => handleSelect(slot)}
                   aria-label={dist < 0.5 ? `Open ${p.title}` : `Show ${p.title}`}
                   tabIndex={visible ? 0 : -1}
-                  className="block h-full w-full cursor-pointer overflow-hidden rounded-[1.6rem] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C84B82]"
-                  style={{ boxShadow: '0 18px 40px rgba(0, 0, 0, 0.55)' }}
+                  className="relative block h-full w-full cursor-pointer overflow-hidden rounded-[1.6rem] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C84B82]"
+                  style={{ boxShadow: p.transparent ? 'none' : '0 18px 40px rgba(0, 0, 0, 0.55)' }}
                   animate={{ opacity: visible ? 1 : 0 }}
                   whileHover={visible ? { y: -14 } : undefined}
                   transition={{
@@ -276,7 +298,12 @@ export default function GraphicSection() {
           <GraphicModal
             key="graphic-modal"
             project={activeProject}
-            onClose={() => setOpen(false)}
+            gallery={gallery}
+            galleryIndex={galleryIndex}
+            revealed={revealed}
+            onReveal={revealGallery}
+            onSelectDesign={selectDesign}
+            onClose={closeModal}
             onPrev={() => shift(-1)}
             onNext={() => shift(1)}
           />
